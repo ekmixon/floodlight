@@ -37,11 +37,13 @@ class LinearTopo(Topo):
     def __init__(self, N, **params):
         Topo.__init__(self, **params)
 
-        hosts = [ self.addHost( 'h%s' % h )
-                  for h in irange( 1, N ) ]
+        hosts = [self.addHost(f'h{h}') for h in irange( 1, N )]
 
-        switches = [ self.addSwitch( 's%s' % s, protocols=["OpenFlow13"] )
-                     for s in irange( 1, N - 1 ) ]
+        switches = [
+            self.addSwitch(f's{s}', protocols=["OpenFlow13"])
+            for s in irange(1, N - 1)
+        ]
+
 
         # Wire up switches
         last = None
@@ -87,8 +89,7 @@ def addVirtualGateway(name):
         "gateway-name" : name,
         "gateway-mac" : "aa:bb:cc:dd:ee:ff"
     }
-    ret = rest_call('/wm/routing/gateway', data, 'POST')
-    return ret
+    return rest_call('/wm/routing/gateway', data, 'POST')
 
 
 def addInterfaceToGateway(name):
@@ -121,8 +122,7 @@ def addInterfaceToGateway(name):
             }
         ]
     }
-    ret = rest_call('/wm/routing/gateway/' + name, data, 'POST')
-    return ret
+    return rest_call(f'/wm/routing/gateway/{name}', data, 'POST')
 
 
 def addNodePortTupleToGateway(name):
@@ -188,28 +188,25 @@ def addNodePortTupleToGateway(name):
             },
         ]
     }
-    ret = rest_call('/wm/routing/gateway/' + name, data, 'POST')
-    return ret
+    return rest_call(f'/wm/routing/gateway/{name}', data, 'POST')
 
 
 def configureDefaultGatewayForHost(host, defaultGatewayIP):
-    host.cmd('route add default gw ' + defaultGatewayIP);
+    host.cmd(f'route add default gw {defaultGatewayIP}');
 
 
 def enableL3Routing():
     data = {
         "enable" : "true"
     }
-    ret = rest_call('/wm/routing/config', data, 'POST')
-    return ret
+    return rest_call('/wm/routing/config', data, 'POST')
 
 
 def disableL3Routing():
     data = {
         "enable" : "false"
     }
-    ret = rest_call('/wm/routing/config', data, 'POST')
-    return ret
+    return rest_call('/wm/routing/config', data, 'POST')
 
 
 def startNetworkWithLinearTopo( hostCount ):
@@ -267,8 +264,7 @@ def startNetworkWithLinearTopo( hostCount ):
 
 def clearGatewayInstance(name):
     data = {}
-    ret = rest_call('/wm/routing/gateway/' + name, data, 'DELETE')
-    return ret
+    return rest_call(f'/wm/routing/gateway/{name}', data, 'DELETE')
 
 
 def stopNetwork():

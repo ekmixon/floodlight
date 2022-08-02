@@ -15,7 +15,7 @@ class RestApi(object):
     def get(self, path):
         #ret = self.rest_call(path, {}, 'GET')
         #return ret[2]
-        f = urllib2.urlopen('http://'+self.server+':'+str(self.port)+path)
+        f = urllib2.urlopen(f'http://{self.server}:{str(self.port)}{path}')
         ret = f.read()
         return json.loads(ret)
 

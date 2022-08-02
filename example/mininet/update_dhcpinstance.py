@@ -40,8 +40,7 @@ def addStaticAddressToDHCPInstance1(name):
             }
         ]
     }
-    ret = rest_call('wm/dhcp/instance/' + name, data, 'POST')
-    return ret
+    return rest_call(f'wm/dhcp/instance/{name}', data, 'POST')
 
 
 def updateDefaultGateway(name):
@@ -49,8 +48,7 @@ def updateDefaultGateway(name):
         "name"         : name,
         "router-ip"    : "10.0.0.10"
     }
-    ret = rest_call('wm/dhcp/instance/' + name, data, 'POST')
-    return ret
+    return rest_call(f'wm/dhcp/instance/{name}', data, 'POST')
 
 if __name__ == '__main__':
     # ret = addStaticAddressToDHCPInstance1('mininet-dhcp-1')

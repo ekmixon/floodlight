@@ -30,11 +30,13 @@ class LinearTopo(Topo):
     def __init__(self, N, **params):
         Topo.__init__(self, **params)
 
-        hosts = [ self.addHost( 'h%s' % h )
-                  for h in irange( 1, N ) ]
+        hosts = [self.addHost(f'h{h}') for h in irange( 1, N )]
 
-        switches = [ self.addSwitch( 's%s' % s, protocols=["OpenFlow13"] )
-                     for s in irange( 1, N - 1 ) ]
+        switches = [
+            self.addSwitch(f's{s}', protocols=["OpenFlow13"])
+            for s in irange(1, N - 1)
+        ]
+
 
         # Wire up switches
         last = None

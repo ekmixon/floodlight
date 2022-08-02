@@ -33,19 +33,11 @@ def validateIp(ip):
              "\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
              "\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
              "\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)")
-    m = re.compile(ipReg).match(ip)
-    if m:
-        return True
-    else :
-        return False
+    return bool(m := re.compile(ipReg).match(ip))
 
 def validateMac(mac):
     macReg = '([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}' # same regex as above
-    m = re.compile(macReg).match(mac)
-    if m:
-        return True
-    else :
-        return False
+    return bool(m := re.compile(macReg).match(mac))
 
 if not validateIp(options.controller):
     parser.error("Invalid format for ip address.")
@@ -59,7 +51,7 @@ if not validateMac(options.mac):
 controller = options.controller
 host = options.mac
 
-url = 'http://%s:8080/wm/core/packettrace/json' % controller
+url = f'http://{controller}:8080/wm/core/packettrace/json'
 filter = {'mac':host, 'direction':'both', 'period':1000}
 post_data = json.dumps(filter)
 request = urllib2.Request(url, post_data, {'Content-Type':'application/json'})

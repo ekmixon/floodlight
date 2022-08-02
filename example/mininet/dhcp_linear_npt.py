@@ -25,11 +25,9 @@ class LinearTopo(Topo):
     def __init__(self, N, **params):
         Topo.__init__(self, **params)
 
-        hosts = [ self.addHost( 'h%s' % h )
-                  for h in irange( 1, N ) ]
+        hosts = [self.addHost(f'h{h}') for h in irange( 1, N )]
 
-        switches = [ self.addSwitch( 's%s' % s )
-                     for s in irange( 1, N - 1 ) ]
+        switches = [self.addSwitch(f's{s}') for s in irange( 1, N - 1 )]
 
         # Wire up switches
         last = None
@@ -82,8 +80,7 @@ def addDHCPInstance1(name):
         "ip-forwarding": "true",
         "domain-name"  : "mininet-domain-name"
     }
-    ret = rest_call('/wm/dhcp/instance', data, 'POST')
-    return ret
+    return rest_call('/wm/dhcp/instance', data, 'POST')
 
 def addDHCPInstance2(name):
     data = {
@@ -99,8 +96,7 @@ def addDHCPInstance2(name):
         "ip-forwarding": "true",
         "domain-name"  : "mininet-domain-name"
     }
-    ret = rest_call('/wm/dhcp/instance', data, 'POST')
-    return ret
+    return rest_call('/wm/dhcp/instance', data, 'POST')
 
 def addNodePortTupleToDHCPInstance1(name):
     data = {
@@ -144,8 +140,7 @@ def addNodePortTupleToDHCPInstance1(name):
 
         ]
     }
-    ret = rest_call('/wm/dhcp/instance/' + name, data, 'POST')
-    return ret
+    return rest_call(f'/wm/dhcp/instance/{name}', data, 'POST')
 
 
 def addNodePortTupleToDHCPInstance2(name):
@@ -161,8 +156,7 @@ def addNodePortTupleToDHCPInstance2(name):
             }
         ]
     }
-    ret = rest_call('/wm/dhcp/instance/' + name, data, 'POST')
-    return ret
+    return rest_call(f'/wm/dhcp/instance/{name}', data, 'POST')
 
 def enableDHCPServer():
     data = {
@@ -170,8 +164,7 @@ def enableDHCPServer():
         "lease-gc-period" : "10",
         "dynamic-lease" : "false"
     }
-    ret = rest_call('/wm/dhcp/config', data, 'POST')
-    return ret
+    return rest_call('/wm/dhcp/config', data, 'POST')
 
 # DHCP client functions
 
@@ -202,18 +195,18 @@ def waitForIP(host):
 
 def mountPrivateResolvconf(host):
     "Create/mount private /etc/resolv.conf for host"
-    etc = '/tmp/etc-%s' % host
+    etc = f'/tmp/etc-{host}'
     host.cmd('mkdir -p', etc)
     host.cmd('mount --bind /etc', etc)
     host.cmd('mount -n -t tmpfs tmpfs /etc')
-    host.cmd('ln -s %s/* /etc/' % etc)
+    host.cmd(f'ln -s {etc}/* /etc/')
     host.cmd('rm /etc/resolv.conf')
-    host.cmd('cp %s/resolv.conf /etc/' % etc)
+    host.cmd(f'cp {etc}/resolv.conf /etc/')
 
 
 def unmountPrivateResolvconf(host):
     "Unmount private /etc dir for host"
-    etc = '/tmp/etc-%s' % host
+    etc = f'/tmp/etc-{host}'
     host.cmd('umount /etc')
     host.cmd('umount', etc)
     host.cmd('rmdir', etc)

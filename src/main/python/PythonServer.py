@@ -26,11 +26,11 @@ class PacketStreamerHandler:
     return true
 
   def pushPacketSync(self, packet):
-    self.log.debug('receive a packet synchronously: %s' %(packet))
+    self.log.debug(f'receive a packet synchronously: {packet}')
     return 0
 
   def pushPacketAsync(self, packet):
-    self.log.debug('receive a packet Asynchronously: %s' %(packet))
+    self.log.debug(f'receive a packet Asynchronously: {packet}')
 
 handler = PacketStreamerHandler()
 processor = PacketStreamer.Processor(handler)
